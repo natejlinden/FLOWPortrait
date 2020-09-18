@@ -21,8 +21,9 @@ The software is organized into three directories (**flow_portraits/**, **figures
 
 - The directory **flow_portraits/** contains all code necesary to perform a FLOW portrait based analysis.
 
-  - **flow_portraits/LCS-tool/** contains code from the LCS Tool (see Acknowledgements above for details) to compute the FTLE
-  - **flow_portraits/flow/** contains additional required code and the subdirectory **demo/** which outlines steps to compute a FLOW portrait
+  - **flow_portraits/** contains additional required code 
+  - **flow_portraits/LCS-tool/** contains required code from the LCS Tool (see Acknowledgements above for details) to compute the FTLE
+  - **flow_portraits/demo/** which outlines steps to compute a FLOW portrait and to choose an integration length
 
 - The directory **figures/** contains scripts to compute the panes in key figures for the FLOW portrait paper
 
