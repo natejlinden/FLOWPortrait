@@ -9,7 +9,7 @@ clear all; close all; clc
 addpath('../flow_portraits')
 
 % load data
-load('DemoData.mat')
+load('../../Data/DemoData.mat')
 
 % Example Usage of creating a flow portrait
 % Here we specify the filename and the inegration length

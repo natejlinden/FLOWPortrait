@@ -10,7 +10,7 @@
 
         % Preprocessing (Ignore me)
         % load data
-        load('DemoData.mat');
+        load('../../Data/DemoData.mat');
         dims = size(dat.dfof);
         % compute optical flow
         [x, y, u, v, ~] = smoothScaledHornSchunk(dat.dfof, 30);
