@@ -5,7 +5,7 @@
 
 % Function to run Horn-Schunk computation on a data stack and perform time-history
 % scaling and temporal filtering operations of the optical flow fields
-function [x, y, u, v, sub_data] = smoothScaledHornSchunk(data, history_delay, alpha_hs, max_iter, avg_win, smooth_win, alpha_smooth)
+function [x, y, u, v, sub_data] = smoothScaledHornSchunck(data, history_delay, alpha_hs, max_iter, avg_win, smooth_win, alpha_smooth)
 % Syntax:
 % [x, y, u, sub_data] = smoothScaledHornSchunk(data, alpha_hs, max_iter, history_delay, avg_win, smooth_win, alpha_smooth)
 
