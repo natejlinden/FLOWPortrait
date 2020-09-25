@@ -54,7 +54,7 @@ dfof_dev_2d = reshape(dfof_dev, [dims_dev(1)*dims_dev(2),dims_dev(3)]);
 % this is the thrid column of Figure 1B for the develping data
 filename = './figure1/developing_flowPortrait.png';
 integrationLength = 40;
-% flowPortrait(dfof_dev, integrationLength, 'filename', filename,'thresh_quantile',0.93);
+flowPortrait(dfof_dev, integrationLength, 'filename', filename,'white_background', true, 'mask', mask_dev);
 
 
 %%%% Adult Mouse Data  %%%%
@@ -78,7 +78,7 @@ dfof_adult_2d = reshape(dfof_adult, [dims_adult(1)*dims_adult(2),dims_adult(3)])
 filename = './figure1/adult_flowPortrait.png';
 integrationLength = 20;
 history_delay = 15;
-flowPortrait(dfof_adult, integrationLength, 'filename', filename,'history_delay', history_delay);
+flowPortrait(dfof_adult, integrationLength, 'filename', filename,'history_delay', history_delay, 'white_background', true, 'mask', mask_adult);
 
 %%%% PLOT SVD SPATIAL MODES %%%%
 % This is the 1st column of Figure 1B
@@ -155,14 +155,14 @@ for i = 1:7
     idxs = [idx, idxs];
 
     % devloping mouse
-    dat = dFoF_dev(:,:,idx); 
+    dat = dfof_dev(:,:,idx); 
     [dat, imAlpha] = whiteBackground(dat, mask_dev);
-    figure('Renderer', 'painters', 'Position', fig_size,'color', 'w');
+    figure('Renderer', 'painters', 'Position', figsize,'color', 'w');
     imagesc(dat,'AlphaData',imAlpha); hold on
     if i==1
         plot([1, 14.08], [dims_dev(1)-2 dims_dev(1)-2],'k','LineWidth',5); % add scale bar to first image
     end
-    colormap(cmap_l5)
+    colormap(cmap_dfof)
     ax = gca; 
     ax.Position = ax.OuterPosition;
     axis off; axis equal
@@ -181,7 +181,7 @@ for i = 1:7
     end
     ax = gca;
     ax.Position = ax.OuterPosition;
-    colormap(cmap_l5); axis off; axis equal
+    colormap(cmap_dfof); axis off; axis equal
     saveas(gcf, strcat(adult_name, num2str(i),'.png'));
     close all
 end
