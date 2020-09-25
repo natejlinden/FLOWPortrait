@@ -32,9 +32,10 @@ function varargout = FTLECompute(start_frame, integration_length, resolution, u,
     
     nargoutchk(1,3);
     
-    path = pwd;
-    path = strsplit(path, 'FLOW_code');
-    addpath(strcat(path{1}, 'FLOW_code/flow_portraits/LCS-tool-scripts')); % add LCS Tool Code
+     % add LCS-tool
+     full_path = pwd; parts = strsplit(full_path, 'FLOWPortrait');
+     path_to_LCS = strcat(parts{1}, 'FLOWPortrait/flow_portraits/LCS-tool/');
+     addpath(path_to_LCS)
 
     % define computational domain as the entire frame
     domain  = [1, size(u, 2); 1, size(u, 1)];
