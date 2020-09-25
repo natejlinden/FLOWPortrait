@@ -38,10 +38,16 @@
 %   flowPortrait(data, integration_length, 'Optional Name-Value Pair Arguments')
 
 function flowPortrait(data, integrationLen, varargin)
-  
+    % add flow_portraits and LCS-tool
+    full_path = pwd; parts = strsplit(full_path, 'FLOWPortrait');
+    path_to_LCS = strcat(parts{1}, 'FLOWPortrait/flow_portraits/LCS-tool/');
+    path_to_flow = strcat(parts{1}, 'FLOWPortrait/flow_portraits/')
+    addpath(path_to_LCS)
+    addpath(path_to_flow)
+
     % default values
     default_alpha_hs=       0.75;
-    default_max_iter=       100;
+    default_max_iter=       50;
     default_avg_win=        5;
     default_smooth_win=     5;
     default_alpha_smooth=   1.25;
@@ -50,38 +56,38 @@ function flowPortrait(data, integrationLen, varargin)
     defaultForColor=        [1 0.647058823529412 0];
     defaultBackColor=       [0.525490196078431 0 0.831372549019608];
     defaultBackgroundCmap=  colormap('gray');
-    defaultFigSize=         [0 0 1000 500];
+    defaultFigSize=         [0 0 500 500];
     defaultFilename=        './flow_image.png';
     defaultMask=            [];
     
     % input parsing
     validColor = @(x) numel(x)==3 && sum(x)<3 && ndims(x)==2;
     validCMAP = @(x) isstring(x) || isnumeric(x);
-    validFigSize = @(x) isnumeric(x) && ndims(x)==4;
+    validFigSize = @(x) isnumeric(x) && numel(x)==4;
     validMask = @(x) (size(x,1)==size(data,1) && size(x,2)==size(data,2)) || x==[];
 
     p = inputParser;  % input parser for optional parameters
-    addOptional(p, 'alpha_hs',          default_alpha_hs,      @isnumeric);
-    addOptional(p, 'max_iter',          default_max_iter,      @isnumeric);
-    addOptional(p, 'avg_win',           default_avg_win,       @isnumeric);
-    addOptional(p, 'smooth_win',        default_smooth_win,    @isnumeric);
-    addOptional(p, 'alpha_smooth',      default_alpha_smooth,  @isnumeric);
-    addOptional(p, 'history_delay',     defaultHistoryDelay,   @isnumeric);
-    addOptional(p, 'thresh_quantile',   defaultTreshQuantile,  @isnumeric);
-    addOptional(p, 'for_color',         defaultForColor,       validColor);
-    addOptional(p, 'back_color',        defaultBackColor,      validColor);
-    addOptional(p, 'background_cmap',   defaultBackgroundCmap, validCMAP);
-    addOptional(p, 'figsize',           defaultFigSize,        validFigSize);
-    addOptional(p, 'filename',          defaultFilename,       @isstring);
-    addOptional(p, 'start_frame',       1,                     @isnumeric);
-    addOptional(p, 'save_optical_flow', false,                 @islogical);
-    addOptional(p, 'save_ftle',         false,                 @islogical);
-    addOptional(p, 'img_format',        '.png',                @isstring);
-    addOptional(p, 'white_background',  false,                 @islogical); 
-    addOptional(p, 'mask',              defaultMask,           validMask);
+    addParameter(p, 'alpha_hs',          default_alpha_hs,      @isnumeric);
+    addParameter(p, 'max_iter',          default_max_iter,      @isnumeric);
+    addParameter(p, 'avg_win',           default_avg_win,       @isnumeric);
+    addParameter(p, 'smooth_win',        default_smooth_win,    @isnumeric);
+    addParameter(p, 'alpha_smooth',      default_alpha_smooth,  @isnumeric);
+    addParameter(p, 'history_delay',     defaultHistoryDelay,   @isnumeric);
+    addParameter(p, 'thresh_quantile',   defaultTreshQuantile,  @isnumeric);
+    addParameter(p, 'for_color',         defaultForColor,       validColor);
+    addParameter(p, 'back_color',        defaultBackColor,      validColor);
+    addParameter(p, 'background_cmap',   defaultBackgroundCmap, validCMAP);
+    addParameter(p, 'figsize',           defaultFigSize,        validFigSize);
+    addParameter(p, 'filename',          defaultFilename,       @ischar);
+    addParameter(p, 'start_frame',       1,                     @isnumeric);
+    addParameter(p, 'save_optical_flow', false,                 @islogical);
+    addParameter(p, 'save_ftle',         false,                 @islogical);
+    addParameter(p, 'img_format',        '.png',                @ischar);
+    addParameter(p, 'white_background',             false,                 @islogical); 
+    addOptional(p, 'mask',               defaultMask,           validMask);
     
 
-    parse(p);
+    parse(p, varargin{:});
     alpha_hs =          p.Results.alpha_hs;
     max_iter =          p.Results.max_iter;
     avg_win =           p.Results.avg_win;
@@ -101,16 +107,13 @@ function flowPortrait(data, integrationLen, varargin)
     white_background =  p.Results.white_background;
     mask =              p.Results.mask;
 
-    who
-
     % preprocessing
     dims = size(data);
     mean_data = mean(data,3);
     disp('Computing Optical Flow...');
 
     % compute Optical Flow using the Horn-Schunck (hs) method
-    [x, y, u, v, ~] = smoothScaledHornSchunk(data, history_delay, alpha_hs, ...
-                                        max_iter, avg_win, smooth_win, alpha_smooth);
+    [x,y,u,v,~] = smoothScaledHornSchunck(data, history_delay, alpha_hs, max_iter, avg_win, smooth_win, alpha_smooth);
 
     if save_optical_flow  % save optical flow output if the user specified
         optical_flow.x =     x; 
@@ -126,7 +129,7 @@ function flowPortrait(data, integrationLen, varargin)
 
     % compute Finite Time Lyapunov Exponent from the vector field 
     resolution = [dims(2), dims(1)];
-    [ftle] = FTLECompute(start_frame, integration_len, resolution, u, v);
+    [ftle] = FTLECompute(start_frame, integrationLen, resolution, u, v);
 
     if save_ftle  % save optical flow output if the user specified
         ftle_filename = strcat(filename,'_ftle.mat');
@@ -136,11 +139,15 @@ function flowPortrait(data, integrationLen, varargin)
     disp('FTLE Complete. Computing and Saving FLOW portrait...');
 
     % compute FLOW portrait from the ftle
-    [forward_flow, backward_flow] = createFLOWPortrait(mean(ftle.f,3), ...
-                                                    mean(ftle.b,3), thresh_quantile);
+    idx_f = ftle.f > 0; idx_b = ftle.b > 0;
+    mean_ftle_f = mean(ftle.f .* idx_f, 3);
+    mean_ftle_b = mean(ftle.b .* idx_b, 3);
+    [forward_flow, backward_flow] = createFLOWPortrait(mean_ftle_f, ...
+                                                    mean_ftle_b, thresh_quantile);
 
     % save output image
-    flow_filename = strcat(filename, '_flow_portrait', img_format);
-    saveFlowPortrait(forward_flow, backward_flow, mean_data, flow_filename, white_background, ...
+    % flow_filename = strcat(filename, '_flow_portrait', img_format);
+
+    saveFlowPortrait(forward_flow, backward_flow, mean_data, filename, white_background, ...
                         mask, for_color, back_color, background_cmap, figsize);
 end
