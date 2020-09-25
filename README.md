@@ -29,5 +29,7 @@ The software is organized into three directories (**flow_portraits/**, **figures
 
 - The directory **data/** contains all data necesary to run the demo scripts and to compute the key figures
 
+- The directoey **SupplementaryVideos/** contain the 4 supplemental videos for the paper
+
   
 
