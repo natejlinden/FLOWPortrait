@@ -8,7 +8,7 @@ clear all; close all; clc
 
 %%%% ADD REQUIRED CODE %%%%
 addpath('../flow_portraits/')
-mkdir('./figure5/')
+mkdir('./figure6/')
 
 
 %%%% COLORMAPS %%%%
@@ -38,7 +38,7 @@ for wave = 1:2
 
     % Create flow portrait to overlay
     integrationLength = 40;
-    filename = strcat('./figure5/wave_', num2str(wave), '_flowPortrait.png');
+    filename = strcat('./figure6/wave_', num2str(wave), '_flowPortrait.png');
     flowPortrait(dfof, integrationLength, 'filename', filename, 'mask', mask, 'background_cmap', cmapl1, 'white_background', true, 'thresh_quantile', 0.92);
 
     %% Save panes 
@@ -65,7 +65,7 @@ for wave = 1:2
         ax.Position = ax.OuterPosition;
         % ax1 = hi.Parent;
         % ax1.Position = ax.OuterPosition;
-        filename = strcat('./figure5/wave_',num2str(wave),'_frame_',num2str(round(frm)),'.png');
+        filename = strcat('./figure6/wave_',num2str(wave),'_frame_',num2str(round(frm)),'.png');
         saveas(gcf, filename);
     
         disp(frm)

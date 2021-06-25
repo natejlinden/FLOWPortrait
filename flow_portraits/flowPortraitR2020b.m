@@ -2,7 +2,7 @@
 %   Nathaniel Linden
 %
 % FUNCTION:
-%   flowPortrait_R2020b
+%   flowPortraitR2020b
 %%% FOR USE WITH MATLAB R2020b %%%%%%
 %% DESCRIPTION: This function computes a FLOW portrait for a segment of widefield imaging data %%
 %

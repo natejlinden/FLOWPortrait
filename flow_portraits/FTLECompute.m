@@ -32,10 +32,7 @@ function varargout = FTLECompute(start_frame, integration_length, resolution, u,
     
     nargoutchk(1,3);
     
-     % add LCS-tool
-     full_path = pwd; parts = strsplit(full_path, 'FLOWPortrait');
-     path_to_LCS = strcat(parts{1}, 'FLOWPortrait/flow_portraits/LCS-tool/');
-     addpath(path_to_LCS)
+    addpath('./LCS-tool-scripts'); % add LCS Tool Code
 
     % define computational domain as the entire frame
     domain  = [1, size(u, 2); 1, size(u, 1)];
@@ -66,9 +63,9 @@ function [forward, rever] = FTLEInt(start_frame, u_,v_,integration_length, resol
     res = resolution;
 
     % make position grids for griddedInterpolant
-    x_ = 1:size(u_, 2);
-    y_ = 1:size(u_, 1);
-    t_ = 1:size(u_, 3);
+    x_ = 1:size(u_, 2)
+    y_ = 1:size(u_, 1)
+    t_ = 1:size(u_, 3)
 
 
     uInterpolant = griddedInterpolant({t_, y_, x_}, permute(u_, [3,1,2]));

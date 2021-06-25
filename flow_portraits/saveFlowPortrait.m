@@ -49,7 +49,7 @@ function saveFlowPortrait(for_FLOW, back_FLOW, mean_dFoF, filename, white_backgr
     % Format and Save Image
     ax = gca;
     ax.CLim = scale;
-    axis off; axis image 
+    axis off; axis tight equal 
     colormap(background_cmap);
     ax.Position = ax.OuterPosition;
     saveas(gcf, filename);
