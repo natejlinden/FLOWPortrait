@@ -1,6 +1,6 @@
 % ORIGINAL CODE FROM Linden et al. 2020 (Go with the FLOW: Visualizing spatiotemporal dynamics in1optical widefield calcium imaging)
 
-% This script recreates all the panes in Figure 7
+% This script recreates all the panes in Figure 8
 % The script does not perform the event extraction or plot traces of active area and movement scores as defined in the methods
 
 % NOTE: The colormaps here use system colormaps and differ from those in than the manuscript. See colormaps section below for details.
